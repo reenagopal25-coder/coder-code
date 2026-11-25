@@ -1,0 +1,1714 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Reena Gopal — Student Developer Portfolio</title>
+
+  <style>
+    /* -------------------- CSS Design Tokens & Theme Variables -------------------- */
+    :root {
+      --bg-body: #f8fafc;
+      --bg-surface: #ffffff;
+      --bg-surface-alt: #f1f5f9;
+      --bg-code: #0f172a;
+      --text-primary: #0f172a;
+      --text-secondary: #334155;
+      --text-muted: #64748b;
+      --text-inverse: #ffffff;
+      --border-subtle: #e2e8f0;
+      --accent: #4f46e5;
+      --accent-hover: #4338ca;
+      --accent-soft: #eef2ff;
+      --accent-text: #3730a3;
+      --success-bg: #ecfdf5;
+      --success-text: #065f46;
+      --success-border: #a7f3d0;
+      --error-bg: #fff1f2;
+      --error-text: #9f1239;
+      --error-border: #fecdd3;
+      --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.05);
+      --shadow-md: 0 10px 25px -10px rgba(15, 23, 42, 0.09);
+      --shadow-lg: 0 22px 45px -15px rgba(15, 23, 42, 0.18);
+      --dot-color: #cbd5e1;
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 18px;
+      --radius-full: 9999px;
+      --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      --container-max: 1140px;
+      --transition: 0.2s ease;
+    }
+
+    html[data-theme="dark"] {
+      --bg-body: #090d16;
+      --bg-surface: #111827;
+      --bg-surface-alt: #1e293b;
+      --bg-code: #060911;
+      --text-primary: #f8fafc;
+      --text-secondary: #cbd5e1;
+      --text-muted: #94a3b8;
+      --text-inverse: #090d16;
+      --border-subtle: #1e293b;
+      --accent: #6366f1;
+      --accent-hover: #818cf8;
+      --accent-soft: rgba(99, 102, 241, 0.16);
+      --accent-text: #a5b4fc;
+      --success-bg: rgba(16, 185, 129, 0.14);
+      --success-text: #6ee7b7;
+      --success-border: rgba(16, 185, 129, 0.35);
+      --error-bg: rgba(244, 63, 94, 0.14);
+      --error-text: #fda4af;
+      --error-border: rgba(244, 63, 94, 0.35);
+      --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.35);
+      --shadow-md: 0 12px 28px -10px rgba(0, 0, 0, 0.55);
+      --shadow-lg: 0 24px 50px -15px rgba(0, 0, 0, 0.75);
+      --dot-color: #1e293b;
+    }
+
+    /* -------------------- Base & Reset -------------------- */
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      font-size: 16px;
+    }
+
+    body {
+      margin: 0;
+      font-family: var(--font-sans);
+      background-color: var(--bg-body);
+      color: var(--text-primary);
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+      transition: background-color var(--transition), color var(--transition);
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button, input, select, textarea {
+      font-family: inherit;
+      color: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    :focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: 0 1rem;
+    }
+
+    @media (min-width: 640px) {
+      .container {
+        padding: 0 1.5rem;
+      }
+    }
+
+    /* -------------------- Sticky Navigation & Mobile Drawer -------------------- */
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      background-color: color-mix(in srgb, var(--bg-surface) 90%, transparent);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border-subtle);
+      transition: background-color var(--transition), border-color var(--transition);
+    }
+
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 64px;
+      gap: 0.75rem;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.65rem;
+      font-weight: 700;
+      font-size: 1rem;
+      letter-spacing: -0.015em;
+    }
+
+    .brand-badge {
+      width: 36px;
+      height: 36px;
+      border-radius: var(--radius-md);
+      background-color: var(--accent);
+      color: #ffffff;
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .nav-links {
+      display: none;
+      align-items: center;
+      gap: 1.25rem;
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+    }
+
+    .nav-links a {
+      padding: 0.35rem 0.1rem;
+      transition: color var(--transition);
+    }
+
+    .nav-links a:hover {
+      color: var(--accent);
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .icon-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+      min-width: 40px;
+      min-height: 40px;
+      padding: 0.5rem 0.75rem;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-subtle);
+      background-color: var(--bg-surface);
+      color: var(--text-primary);
+      font-size: 0.82rem;
+      font-weight: 600;
+      transition: background-color var(--transition), border-color var(--transition), transform var(--transition);
+    }
+
+    .icon-btn:hover {
+      background-color: var(--bg-surface-alt);
+    }
+
+    .mobile-toggle {
+      display: inline-flex;
+    }
+
+    @media (min-width: 900px) {
+      .nav-links {
+        display: flex;
+      }
+
+      .mobile-toggle {
+        display: none;
+      }
+    }
+
+    /* Mobile Drawer */
+    .drawer-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 50;
+      background-color: rgba(2, 6, 23, 0.55);
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity var(--transition), visibility var(--transition);
+    }
+
+    .drawer-backdrop.open {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .mobile-drawer {
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 60;
+      width: min(82vw, 320px);
+      background-color: var(--bg-surface);
+      border-left: 1px solid var(--border-subtle);
+      box-shadow: var(--shadow-lg);
+      padding: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      transform: translateX(100%);
+      transition: transform 0.25s ease, background-color var(--transition);
+      overflow-y: auto;
+    }
+
+    .mobile-drawer.open {
+      transform: translateX(0);
+    }
+
+    .drawer-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 0.85rem;
+      margin-bottom: 0.5rem;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .drawer-link {
+      display: block;
+      padding: 0.75rem 0.85rem;
+      border-radius: var(--radius-md);
+      font-size: 0.95rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      transition: background-color var(--transition), color var(--transition);
+    }
+
+    .drawer-link:hover {
+      background-color: var(--bg-surface-alt);
+      color: var(--accent);
+    }
+
+    /* -------------------- Hero / Home Section -------------------- */
+    .hero {
+      position: relative;
+      padding: 3.5rem 0 4rem;
+      border-bottom: 1px solid var(--border-subtle);
+      background-color: var(--bg-surface);
+      background-image: radial-gradient(var(--dot-color) 1px, transparent 1px);
+      background-size: 22px 22px;
+      overflow: hidden;
+    }
+
+    @media (min-width: 768px) {
+      .hero {
+        padding: 4.75rem 0 5rem;
+      }
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 2rem;
+      align-items: center;
+    }
+
+    @media (min-width: 960px) {
+      .hero-grid {
+        grid-template-columns: 1.35fr 0.85fr;
+        gap: 2.5rem;
+      }
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      padding: 0.35rem 0.8rem;
+      border-radius: var(--radius-full);
+      background-color: var(--accent-soft);
+      color: var(--accent-text);
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+    }
+
+    .hero-title {
+      margin: 0 0 0.65rem;
+      font-size: clamp(2rem, 5vw, 3.25rem);
+      font-weight: 800;
+      line-height: 1.12;
+      letter-spacing: -0.025em;
+    }
+
+    .hero-subtitle {
+      margin: 0 0 1.25rem;
+      font-size: clamp(0.98rem, 2.2vw, 1.18rem);
+      font-weight: 600;
+      color: var(--accent);
+    }
+
+    .hero-copy {
+      margin: 0 0 1rem;
+      color: var(--text-secondary);
+      font-size: 1rem;
+      max-width: 64ch;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-top: 1.5rem;
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.85rem 1.45rem;
+      border-radius: var(--radius-md);
+      background-color: var(--accent);
+      color: #ffffff;
+      font-size: 0.95rem;
+      font-weight: 600;
+      border: 1px solid transparent;
+      box-shadow: var(--shadow-sm);
+      transition: background-color var(--transition), transform var(--transition);
+    }
+
+    .btn-primary:hover {
+      background-color: var(--accent-hover);
+      transform: translateY(-1px);
+    }
+
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.45rem;
+      padding: 0.85rem 1.25rem;
+      border-radius: var(--radius-md);
+      background-color: var(--bg-surface);
+      color: var(--text-primary);
+      font-size: 0.92rem;
+      font-weight: 600;
+      border: 1px solid var(--border-subtle);
+      transition: background-color var(--transition), border-color var(--transition);
+    }
+
+    .btn-secondary:hover {
+      background-color: var(--bg-surface-alt);
+    }
+
+    .hero-card {
+      background-color: var(--bg-code);
+      color: #e2e8f0;
+      border-radius: var(--radius-lg);
+      border: 1px solid rgba(148, 163, 184, 0.2);
+      box-shadow: var(--shadow-lg);
+      overflow: hidden;
+    }
+
+    .hero-card-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.7rem 1rem;
+      background-color: rgba(255, 255, 255, 0.04);
+      border-bottom: 1px solid rgba(148, 163, 184, 0.14);
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: #94a3b8;
+    }
+
+    .dots {
+      display: inline-flex;
+      gap: 6px;
+    }
+
+    .dots span {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+
+    .dots span:nth-child(1) { background: #fb7185; }
+    .dots span:nth-child(2) { background: #fbbf24; }
+    .dots span:nth-child(3) { background: #34d399; }
+
+    .hero-card-body {
+      padding: 1.25rem;
+      font-family: var(--font-mono);
+      font-size: 0.82rem;
+      line-height: 1.65;
+      overflow-x: auto;
+    }
+
+    .hero-card-body pre {
+      margin: 0;
+    }
+
+    /* -------------------- Sections & Cards -------------------- */
+    .section {
+      padding: 3.75rem 0;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .section-alt {
+      background-color: var(--bg-surface);
+    }
+
+    .section-header {
+      margin-bottom: 2rem;
+    }
+
+    .section-label {
+      display: inline-block;
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--accent);
+      margin-bottom: 0.4rem;
+    }
+
+    .section-title {
+      margin: 0;
+      font-size: clamp(1.55rem, 3.2vw, 2.2rem);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+    }
+
+    .section-subtitle {
+      margin: 0.5rem 0 0;
+      color: var(--text-muted);
+      font-size: 0.98rem;
+      max-width: 65ch;
+    }
+
+    .card {
+      background-color: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      box-shadow: var(--shadow-sm);
+      transition: border-color var(--transition), box-shadow var(--transition), transform var(--transition), background-color var(--transition);
+    }
+
+    .section-alt .card {
+      background-color: var(--bg-body);
+    }
+
+    .card:hover {
+      box-shadow: var(--shadow-md);
+    }
+
+    .card-title {
+      margin: 0 0 0.65rem;
+      font-size: 1.15rem;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+    }
+
+    .card-text {
+      margin: 0 0 0.85rem;
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+    }
+
+    .card-text:last-child {
+      margin-bottom: 0;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.25rem;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.25rem;
+    }
+
+    @media (min-width: 700px) {
+      .grid-2 {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .grid-3 {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .grid-3 {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    /* Pill Tags & Bullet Lists */
+    .pill-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.35rem 0.75rem;
+      border-radius: var(--radius-full);
+      background-color: var(--accent-soft);
+      color: var(--accent-text);
+      font-size: 0.84rem;
+      font-weight: 600;
+      border: 1px solid transparent;
+    }
+
+    .pill-neutral {
+      background-color: var(--bg-surface-alt);
+      color: var(--text-secondary);
+      border-color: var(--border-subtle);
+      font-weight: 500;
+    }
+
+    .clean-list {
+      margin: 0.4rem 0 0;
+      padding-left: 1.15rem;
+      color: var(--text-secondary);
+      font-size: 0.93rem;
+    }
+
+    .clean-list li {
+      margin-bottom: 0.4rem;
+    }
+
+    .clean-list li:last-child {
+      margin-bottom: 0;
+    }
+
+    /* -------------------- Projects Filter & Cards -------------------- */
+    .filter-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .filter-pill {
+      padding: 0.55rem 1rem;
+      border-radius: var(--radius-full);
+      border: 1px solid var(--border-subtle);
+      background-color: var(--bg-surface);
+      color: var(--text-secondary);
+      font-size: 0.88rem;
+      font-weight: 600;
+      transition: all var(--transition);
+    }
+
+    .filter-pill:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .filter-pill.active {
+      background-color: var(--accent);
+      border-color: var(--accent);
+      color: #ffffff;
+    }
+
+    .project-card {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 1.1rem;
+    }
+
+    .project-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+      margin-bottom: 0.5rem;
+      font-family: var(--font-mono);
+      font-size: 0.76rem;
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    .project-subhead {
+      margin: 0.85rem 0 0.35rem;
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--text-muted);
+    }
+
+    .repo-note {
+      margin-top: 0.85rem;
+      padding: 0.65rem 0.8rem;
+      border-radius: var(--radius-sm);
+      background-color: var(--bg-surface-alt);
+      border: 1px dashed var(--border-subtle);
+      font-size: 0.82rem;
+      color: var(--text-secondary);
+    }
+
+    .project-footer {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.65rem;
+      padding-top: 0.9rem;
+      border-top: 1px solid var(--border-subtle);
+    }
+
+    .btn-sm {
+      padding: 0.55rem 0.9rem;
+      font-size: 0.85rem;
+      border-radius: var(--radius-sm);
+    }
+
+    /* -------------------- Education Highlight -------------------- */
+    .edu-box {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+
+    @media (min-width: 768px) {
+      .edu-box {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    .edu-item-label {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      margin-bottom: 0.25rem;
+    }
+
+    .edu-item-value {
+      font-size: 1.02rem;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    /* -------------------- Contact Section & Form -------------------- */
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+      align-items: start;
+    }
+
+    @media (min-width: 900px) {
+      .contact-grid {
+        grid-template-columns: 0.95fr 1.15fr;
+        gap: 2rem;
+      }
+    }
+
+    .contact-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      padding: 0.85rem 1rem;
+      border-radius: var(--radius-md);
+      background-color: var(--bg-surface-alt);
+      border: 1px solid var(--border-subtle);
+      margin-top: 0.75rem;
+    }
+
+    .contact-value {
+      font-family: var(--font-mono);
+      font-size: 0.88rem;
+      font-weight: 600;
+      word-break: break-all;
+    }
+
+    .feedback-msg {
+      margin-top: 0.6rem;
+      padding: 0.65rem 0.85rem;
+      border-radius: var(--radius-sm);
+      font-size: 0.86rem;
+      font-weight: 500;
+      display: none;
+    }
+
+    .feedback-msg.show {
+      display: block;
+    }
+
+    .feedback-success {
+      background-color: var(--success-bg);
+      color: var(--success-text);
+      border: 1px solid var(--success-border);
+    }
+
+    .feedback-error {
+      background-color: var(--error-bg);
+      color: var(--error-text);
+      border: 1px solid var(--error-border);
+    }
+
+    .form-group {
+      margin-bottom: 1rem;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 0.88rem;
+      font-weight: 600;
+      margin-bottom: 0.35rem;
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 0.72rem 0.85rem;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-subtle);
+      background-color: var(--bg-body);
+      font-size: 0.94rem;
+      transition: border-color var(--transition), box-shadow var(--transition);
+    }
+
+    .section-alt .form-control {
+      background-color: var(--bg-surface);
+    }
+
+    .form-control:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--accent-soft);
+    }
+
+    textarea.form-control {
+      min-height: 115px;
+      resize: vertical;
+    }
+
+    /* -------------------- Modal -------------------- */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 70;
+      background-color: rgba(2, 6, 23, 0.65);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+
+    .modal-backdrop.open {
+      display: flex;
+    }
+
+    .modal-dialog {
+      width: 100%;
+      max-width: 640px;
+      max-height: 88vh;
+      overflow-y: auto;
+      background-color: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-lg);
+      padding: 1.5rem;
+    }
+
+    .modal-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 1rem;
+      padding-bottom: 0.85rem;
+      border-bottom: 1px solid var(--border-subtle);
+      margin-bottom: 1rem;
+    }
+
+    .modal-title {
+      margin: 0.2rem 0 0;
+      font-size: 1.35rem;
+      font-weight: 800;
+    }
+
+    .modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 0.65rem;
+      margin-top: 1.35rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border-subtle);
+    }
+
+    /* -------------------- Footer -------------------- */
+    .site-footer {
+      padding: 1.75rem 0;
+      background-color: var(--bg-surface);
+      color: var(--text-muted);
+      font-size: 0.88rem;
+    }
+
+    .footer-inner {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      text-align: center;
+    }
+
+    @media (min-width: 640px) {
+      .footer-inner {
+        flex-direction: row;
+        text-align: left;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- ==================== STICKY NAVIGATION BAR ==================== -->
+  <header class="site-header" id="top">
+    <div class="container nav-inner">
+      <a href="#home" class="brand">
+        <span class="brand-badge" aria-hidden="true">RG</span>
+        <span>Reena Gopal</span>
+      </a>
+
+      <nav class="nav-links" aria-label="Primary Navigation">
+        <a href="#home">Home</a>
+        <a href="#about">About</a>
+        <a href="#skills">Skills</a>
+        <a href="#projects">Projects</a>
+        <a href="#experience">Experience</a>
+        <a href="#education">Education</a>
+        <a href="#journey">Journey &amp; Goal</a>
+        <a href="#contact">Contact</a>
+      </nav>
+
+      <div class="nav-actions">
+        <button
+          type="button"
+          id="theme-toggle"
+          class="icon-btn"
+          aria-label="Toggle light and dark theme"
+          title="Switch light/dark theme"
+        >
+          <span id="theme-icon" aria-hidden="true">🌙</span>
+          <span id="theme-label">Dark</span>
+        </button>
+
+        <button
+          type="button"
+          id="drawer-open-btn"
+          class="icon-btn mobile-toggle"
+          aria-label="Open navigation menu"
+          aria-expanded="false"
+          aria-controls="mobile-drawer"
+        >
+          <span aria-hidden="true">☰</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==================== MOBILE MENU DRAWER ==================== -->
+  <div id="drawer-backdrop" class="drawer-backdrop" aria-hidden="true"></div>
+  <aside id="mobile-drawer" class="mobile-drawer" aria-label="Mobile Navigation" aria-hidden="true">
+    <div class="drawer-header">
+      <span class="brand">
+        <span class="brand-badge" aria-hidden="true">RG</span>
+        <span>Menu</span>
+      </span>
+      <button type="button" id="drawer-close-btn" class="icon-btn" aria-label="Close navigation menu">
+        <span aria-hidden="true">✕</span>
+      </button>
+    </div>
+    <a href="#home" class="drawer-link">1. Home</a>
+    <a href="#about" class="drawer-link">2. About Me</a>
+    <a href="#skills" class="drawer-link">3. Technical Skills</a>
+    <a href="#projects" class="drawer-link">4. Projects</a>
+    <a href="#experience" class="drawer-link">5–6. Experience &amp; Volunteering</a>
+    <a href="#education" class="drawer-link">7. Education</a>
+    <a href="#soft-skills" class="drawer-link">8 &amp; 11. Soft Skills &amp; Interests</a>
+    <a href="#journey" class="drawer-link">9–10. Journey &amp; Goal</a>
+    <a href="#contact" class="drawer-link">12. Contact Me</a>
+  </aside>
+
+  <main>
+    <!-- ==================== 1. HOME / HERO ==================== -->
+    <section id="home" class="hero">
+      <div class="container hero-grid">
+        <div>
+          <span class="eyebrow">Reena Gopal • Student Developer</span>
+          <h1 class="hero-title">Hi, I'm a Student Developer.</h1>
+          <p class="hero-subtitle">BCA Student | Aspiring Software Developer | Former IT Coordinator</p>
+
+          <p class="hero-copy">
+            Hello! I am a BCA student interested in programming, technology, and software development. I enjoy learning new technologies, solving problems, and building projects through code.
+          </p>
+          <p class="hero-copy">
+            I have explored programming languages such as Python, C, C++, and Java, along with HTML and CSS for web development. I also have experience in campus IT coordination and responsibilities.
+          </p>
+          <p class="hero-copy">
+            I believe in learning by doing, exploring new ideas, and continuously improving my skills.
+          </p>
+
+          <div class="hero-actions">
+            <a href="#projects" class="btn-primary">Explore My Projects ↓</a>
+            <a href="#contact" class="btn-secondary">Let's Connect</a>
+          </div>
+        </div>
+
+        <aside class="hero-card" aria-label="Developer Snapshot">
+          <div class="hero-card-bar">
+            <span class="dots" aria-hidden="true"><span></span><span></span><span></span></span>
+            <span>reena_gopal.profile</span>
+          </div>
+          <div class="hero-card-body">
+            <pre><code>{
+  "name": "Reena Gopal",
+  "role": "Student Developer",
+  "education": "BCA (2nd Semester)",
+  "college": "Govt Kirodimal Art's and Science College, Raigarh (C.G)",
+  "background": "Former IT Coordinator",
+  "languages": ["Python", "C", "C++", "Java", "HTML", "CSS"],
+  "approach": "Learning by doing"
+}</code></pre>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- ==================== 2. ABOUT ME ==================== -->
+    <section id="about" class="section">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-label">02 / About Me</span>
+          <h2 class="section-title">Who I Am</h2>
+        </div>
+
+        <div class="card">
+          <p class="card-text">
+            I am a Bachelor of Computer Applications (BCA) student with an interest in programming, software development, and technology.
+          </p>
+          <p class="card-text">
+            My learning journey has allowed me to explore different programming languages, work on projects, and understand how technology can be used to solve problems.
+          </p>
+          <p class="card-text">
+            Along with my academic learning, I have also served as an IT Coordinator on campus, where I was involved in IT-related responsibilities, coordination, asset tracking, and record management.
+          </p>
+          <p class="card-text">
+            I enjoy learning through practical experience, experimenting with code, and challenging myself to understand new concepts. I am continuously working on improving my technical, communication, and problem-solving skills.
+          </p>
+          <p class="card-text">
+            I want to grow as a developer by building projects, exploring new technologies, and gaining practical experience.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== 3. TECHNICAL SKILLS ==================== -->
+    <section id="skills" class="section section-alt">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-label">03 / Technical Skills</span>
+          <h2 class="section-title">Languages, Concepts &amp; Tools</h2>
+          <p class="section-subtitle">
+            Organized overview of programming languages, web fundamentals, core coding concepts, and developer tools I have explored.
+          </p>
+        </div>
+
+        <div class="grid-2">
+          <!-- Programming Languages -->
+          <div class="card">
+            <h3 class="card-title">Programming Languages</h3>
+            <ul class="pill-list">
+              <li class="pill">Python</li>
+              <li class="pill">C</li>
+              <li class="pill">C++</li>
+              <li class="pill">Java</li>
+            </ul>
+          </div>
+
+          <!-- Web Development -->
+          <div class="card">
+            <h3 class="card-title">Web Development</h3>
+            <ul class="pill-list">
+              <li class="pill">HTML</li>
+              <li class="pill">CSS</li>
+            </ul>
+          </div>
+
+          <!-- Concepts I Have Explored -->
+          <div class="card">
+            <h3 class="card-title">Concepts I Have Explored</h3>
+            <ul class="clean-list">
+              <li>Functions</li>
+              <li>Loops and conditional statements</li>
+              <li>Dictionaries and data structures</li>
+              <li>Object-Oriented Programming</li>
+              <li>Classes and objects</li>
+              <li>File handling</li>
+              <li>Problem-solving and programming logic</li>
+            </ul>
+          </div>
+
+          <!-- Tools and Technologies -->
+          <div class="card">
+            <h3 class="card-title">Tools and Technologies</h3>
+            <ul class="pill-list">
+              <li class="pill pill-neutral">Linux / Ubuntu</li>
+              <li class="pill pill-neutral">Git and GitHub</li>
+              <li class="pill pill-neutral">VS Code</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== 4. PROJECTS ==================== -->
+    <section id="projects" class="section">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-label">04 / Projects</span>
+          <h2 class="section-title">Practice &amp; Learning Projects</h2>
+          <p class="section-subtitle">
+            Filter projects by category or open a project's detail view to inspect learning takeaways and repository notes.
+          </p>
+        </div>
+
+        <div class="filter-bar" role="group" aria-label="Filter projects by category">
+          <button type="button" class="filter-pill active" data-filter="all">All</button>
+          <button type="button" class="filter-pill" data-filter="python">Python</button>
+          <button type="button" class="filter-pill" data-filter="data-logic">Data &amp; Logic</button>
+        </div>
+
+        <div id="projects-grid" class="grid-2"></div>
+      </div>
+    </section>
+
+    <!-- ==================== 5 & 6. EXPERIENCE & CAMPUS VOLUNTEERING ==================== -->
+    <section id="experience" class="section section-alt">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-label">05 &amp; 06 / Experience &amp; Campus Volunteering</span>
+          <h2 class="section-title">IT Coordination &amp; Community Involvement</h2>
+        </div>
+
+        <div class="grid-2">
+          <!-- 5. Experience -->
+          <article class="card">
+            <span class="section-label">05 / Experience</span>
+            <h3 class="card-title">IT Coordinator — Campus IT Coordination</h3>
+            <p class="card-text">
+              I served as an IT Coordinator on campus, where I was involved in IT-related responsibilities, asset tracking, record management, and coordination.
+            </p>
+
+            <p class="project-subhead">Responsibilities</p>
+            <ul class="clean-list">
+              <li>Maintained and organized IT-related records.</li>
+              <li>Worked on laptop and asset tracking.</li>
+              <li>Managed laptop bag submission and return records.</li>
+              <li>Communicated IT-related rules and updates.</li>
+              <li>Supported campus IT-related coordination.</li>
+              <li>Worked on tracking systems and record management.</li>
+              <li>Contributed to organized IT operations on campus.</li>
+            </ul>
+
+            <p class="project-subhead">Skills Developed</p>
+            <ul class="pill-list" style="margin-top: 0.4rem;">
+              <li class="pill pill-neutral">IT coordination</li>
+              <li class="pill pill-neutral">Organization</li>
+              <li class="pill pill-neutral">Communication</li>
+              <li class="pill pill-neutral">Responsibility</li>
+              <li class="pill pill-neutral">Record management</li>
+              <li class="pill pill-neutral">Problem-solving</li>
+              <li class="pill pill-neutral">Coordination</li>
+            </ul>
+          </article>
+
+          <!-- 6. Campus Contributions & Volunteering -->
+          <article class="card">
+            <span class="section-label">06 / Campus Contributions &amp; Volunteering</span>
+            <h3 class="card-title">Campus Responsibilities &amp; Volunteering</h3>
+            <p class="card-text">
+              I have participated in campus responsibilities and volunteering activities that have helped me learn teamwork, communication, coordination, and responsibility.
+            </p>
+            <p class="card-text">
+              Through my campus involvement, I have gained experience working with others, contributing to activities, and taking responsibility for assigned tasks.
+            </p>
+
+            <p class="project-subhead">Skills Developed</p>
+            <ul class="pill-list" style="margin-top: 0.4rem;">
+              <li class="pill">Teamwork</li>
+              <li class="pill">Communication</li>
+              <li class="pill">Coordination</li>
+              <li class="pill">Responsibility</li>
+              <li class="pill">Organization</li>
+              <li class="pill">Collaboration</li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== 7. EDUCATION ==================== -->
+    <section id="education" class="section">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-label">07 / Education</span>
+          <h2 class="section-title">Academic Background</h2>
+        </div>
+
+        <div class="card">
+          <div class="edu-box">
+            <div>
+              <div class="edu-item-label">Degree Program</div>
+              <div class="edu-item-value">Bachelor of Computer Applications (BCA)</div>
+            </div>
+            <div>
+              <div class="edu-item-label">Current Status</div>
+              <div class="edu-item-value">Currently Pursuing – 2nd Semester</div>
+            </div>
+            <div>
+              <div class="edu-item-label">College</div>
+              <div class="edu-item-value">Govt kirodimal Art's and Science College Raigarh (C.G)</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== 8 & 11. SOFT SKILLS & INTERESTS ==================== -->
+    <section id="soft-skills" class="section section-alt">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-label">08 &amp; 11 / Soft Skills &amp; Interests</span>
+          <h2 class="section-title">How I Work &amp; What Excites Me</h2>
+        </div>
+
+        <div class="grid-2">
+          <!-- 8. Soft Skills -->
+          <div class="card">
+            <span class="section-label">08 / Soft Skills</span>
+            <h3 class="card-title">Interpersonal &amp; Work Strengths</h3>
+            <ul class="pill-list">
+              <li class="pill pill-neutral">Problem-solving</li>
+              <li class="pill pill-neutral">Teamwork</li>
+              <li class="pill pill-neutral">Communication</li>
+              <li class="pill pill-neutral">Adaptability</li>
+              <li class="pill pill-neutral">Creativity</li>
+              <li class="pill pill-neutral">Responsibility</li>
+              <li class="pill pill-neutral">Organization</li>
+              <li class="pill pill-neutral">Willingness to learn</li>
+              <li class="pill pill-neutral">Collaboration</li>
+            </ul>
+          </div>
+
+          <!-- 11. Interests -->
+          <div class="card">
+            <span class="section-label">11 / Interests</span>
+            <h3 class="card-title">Areas of Interest</h3>
+            <ul class="pill-list">
+              <li class="pill">Programming</li>
+              <li class="pill">Software development</li>
+              <li class="pill">Web development</li>
+              <li class="pill">Exploring new technologies</li>
+              <li class="pill">Building coding projects</li>
+              <li class="pill">Data visualization</li>
+              <li class="pill">Open-source learning</li>
+              <li class="pill">Problem-solving</li>
+              <li class="pill">Learning through experimentation</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== 9 & 10. MY LEARNING JOURNEY & MY GOAL ==================== -->
+    <section id="journey" class="section">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-label">09 &amp; 10 / Journey &amp; Goal</span>
+          <h2 class="section-title">Growth Path &amp; Future Vision</h2>
+        </div>
+
+        <div class="grid-2">
+          <!-- 9. My Learning Journey -->
+          <article class="card">
+            <span class="section-label">09 / My Learning Journey</span>
+            <h3 class="card-title">Building Strong Fundamentals</h3>
+            <p class="card-text">
+              My learning journey is focused on building strong programming fundamentals and understanding how technology works.
+            </p>
+            <p class="card-text">
+              I have explored multiple programming languages, worked on practical projects, and learned concepts related to programming, web development, and data visualization.
+            </p>
+            <p class="card-text">
+              I believe that consistent practice, curiosity, and learning from mistakes are important parts of becoming a better developer.
+            </p>
+            <p class="card-text">
+              I am always interested in exploring new technologies, improving my knowledge, and turning what I learn into practical projects.
+            </p>
+          </article>
+
+          <!-- 10. My Goal -->
+          <article class="card">
+            <span class="section-label">10 / My Goal</span>
+            <h3 class="card-title">Becoming a Skilled Software Developer</h3>
+            <p class="card-text">
+              My goal is to become a skilled software developer with strong programming fundamentals and practical experience.
+            </p>
+            <p class="card-text">
+              I want to continue learning, build meaningful projects, explore open-source communities, and develop solutions that are useful in real-world situations.
+            </p>
+            <p class="card-text">
+              I believe that every project, challenge, and new concept is an opportunity to grow.
+            </p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== 12. CONTACT ME ==================== -->
+    <section id="contact" class="section section-alt">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-label">12 / Contact Me</span>
+          <h2 class="section-title">Let's Connect!</h2>
+        </div>
+
+        <div class="contact-grid">
+          <div class="card">
+            <h3 class="card-title">Get in Touch</h3>
+            <p class="card-text">
+              I am always interested in learning, exploring technology, and connecting with people who share an interest in development and programming.
+            </p>
+
+            <div class="contact-row">
+              <div>
+                <div class="edu-item-label">Email</div>
+                <a href="mailto:reenagopal25@navgurukul.org" id="email-text" class="contact-value">
+                  reenagopal25@navgurukul.org
+                </a>
+              </div>
+              <button type="button" id="copy-email-btn" class="btn-secondary btn-sm">
+                Copy Email
+              </button>
+            </div>
+            <div id="copy-status" class="feedback-msg feedback-success" role="status" aria-live="polite"></div>
+
+            <div class="contact-row">
+              <div>
+                <div class="edu-item-label">LinkedIn</div>
+                <a
+                  href="https://www.linkedin.com/in/reena-gopal/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="contact-value"
+                >
+                  Reena Gopal ↗
+                </a>
+              </div>
+              <a
+                href="https://www.linkedin.com/in/reena-gopal/"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="btn-secondary btn-sm"
+              >
+                View Profile
+              </a>
+            </div>
+          </div>
+
+          <form id="contact-form" class="card" novalidate>
+            <h3 class="card-title">Send a Message</h3>
+            <p class="card-text">
+              Have a question, project idea, or opportunity? Drop a note below.
+            </p>
+
+            <div class="form-group">
+              <label for="msg-name" class="form-label">Your Name *</label>
+              <input type="text" id="msg-name" name="name" class="form-control" placeholder="Enter your name" required />
+            </div>
+
+            <div class="form-group">
+              <label for="msg-email" class="form-label">Your Email *</label>
+              <input type="email" id="msg-email" name="email" class="form-control" placeholder="you@example.com" required />
+            </div>
+
+            <div class="form-group">
+              <label for="msg-body" class="form-label">Message *</label>
+              <textarea id="msg-body" name="message" class="form-control" placeholder="Write your message here..." required></textarea>
+            </div>
+
+            <div id="form-feedback" class="feedback-msg" role="status" aria-live="polite"></div>
+
+            <button type="submit" class="btn-primary" style="margin-top: 0.75rem;">
+              Send Message
+            </button>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p style="margin: 0;">
+        &copy; <span id="year">2026</span> Reena Gopal — BCA Student Developer Portfolio.
+      </p>
+      <a href="#home">Back to top ↑</a>
+    </div>
+  </footer>
+
+  <!-- ==================== PROJECT DETAIL MODAL ==================== -->
+  <div id="project-modal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div class="modal-dialog">
+      <div class="modal-top">
+        <div>
+          <span id="modal-category" class="section-label"></span>
+          <h3 id="modal-title" class="modal-title"></h3>
+        </div>
+        <button type="button" id="modal-close-btn" class="icon-btn" aria-label="Close project details">
+          <span aria-hidden="true">✕</span>
+        </button>
+      </div>
+
+      <p id="modal-desc" class="card-text"></p>
+
+      <p class="project-subhead">Technologies Used</p>
+      <ul id="modal-tech" class="pill-list" style="margin-top: 0.35rem;"></ul>
+
+      <p class="project-subhead">What I Learned</p>
+      <ul id="modal-learned" class="clean-list"></ul>
+
+      <div id="modal-repo" class="repo-note"></div>
+
+      <div class="modal-actions">
+        <button type="button" id="modal-done-btn" class="btn-primary btn-sm">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== PORTFOLIO INTERACTIVITY SCRIPT ==================== -->
+  <script>
+    (function () {
+      "use strict";
+
+      // ---------- Projects Data ----------
+      const PROJECTS = [
+        {
+          id: "python-game",
+          title: "Project 1: Python Game",
+          categoryLabel: "Python • Game & Logic",
+          filters: ["all", "python"],
+          description:
+            "I developed a game project using Python as part of my programming practice. This project helped me explore programming logic and understand how different components work together to create a functional game.",
+          technologies: ["Python"],
+          learned: [
+            "Programming logic",
+            "Functions and classes",
+            "Debugging",
+            "Problem-solving",
+            "Project development"
+          ],
+          repoText: "GitHub Repository: [Add Link] — Replace this placeholder with your Python Game GitHub repository URL once uploaded."
+        },
+        {
+          id: "data-visualization",
+          title: "Project 2: Data Visualization",
+          categoryLabel: "Python • Data & Logic",
+          filters: ["all", "python", "data-logic"],
+          description:
+            "I worked on a data visualization project using Python to represent data in a graphical format. This project helped me explore data handling and visual representation through graphs and charts.",
+          technologies: ["Python", "Matplotlib or Pygal"],
+          learned: [
+            "Working with data",
+            "Data visualization",
+            "Creating charts and graphs",
+            "Using Python libraries",
+            "Understanding graphical data representation"
+          ],
+          repoText: "GitHub Repository: [Add Link] — Replace this placeholder with your Data Visualization GitHub repository URL once uploaded."
+        }
+      ];
+
+      // ---------- Theme Toggle (Light Default, Persisted) ----------
+      const htmlEl = document.documentElement;
+      const themeBtn = document.getElementById("theme-toggle");
+      const themeIcon = document.getElementById("theme-icon");
+      const themeLabel = document.getElementById("theme-label");
+
+      function applyTheme(theme) {
+        const isDark = theme === "dark";
+        if (isDark) {
+          htmlEl.setAttribute("data-theme", "dark");
+        } else {
+          htmlEl.removeAttribute("data-theme");
+        }
+        if (themeIcon) themeIcon.textContent = isDark ? "☀️" : "🌙";
+        if (themeLabel) themeLabel.textContent = isDark ? "Light" : "Dark";
+        try {
+          localStorage.setItem("rg-portfolio-theme", theme);
+        } catch (e) {
+          // Ignore storage restrictions in restricted sandboxes
+        }
+      }
+
+      let savedTheme = "light";
+      try {
+        savedTheme = localStorage.getItem("rg-portfolio-theme") || "light";
+      } catch (e) {
+        savedTheme = "light";
+      }
+      applyTheme(savedTheme);
+
+      if (themeBtn) {
+        themeBtn.addEventListener("click", function () {
+          const currentIsDark = htmlEl.getAttribute("data-theme") === "dark";
+          applyTheme(currentIsDark ? "light" : "dark");
+        });
+      }
+
+      // ---------- Mobile Drawer Controls ----------
+      const drawer = document.getElementById("mobile-drawer");
+      const backdrop = document.getElementById("drawer-backdrop");
+      const openDrawerBtn = document.getElementById("drawer-open-btn");
+      const closeDrawerBtn = document.getElementById("drawer-close-btn");
+
+      function setDrawer(open) {
+        if (!drawer || !backdrop || !openDrawerBtn) return;
+        drawer.classList.toggle("open", open);
+        backdrop.classList.toggle("open", open);
+        drawer.setAttribute("aria-hidden", String(!open));
+        backdrop.setAttribute("aria-hidden", String(!open));
+        openDrawerBtn.setAttribute("aria-expanded", String(open));
+      }
+
+      if (openDrawerBtn) openDrawerBtn.addEventListener("click", () => setDrawer(true));
+      if (closeDrawerBtn) closeDrawerBtn.addEventListener("click", () => setDrawer(false));
+      if (backdrop) backdrop.addEventListener("click", () => setDrawer(false));
+
+      document.querySelectorAll(".drawer-link").forEach((link) => {
+        link.addEventListener("click", () => setDrawer(false));
+      });
+
+      // ---------- Projects Rendering, Filtering & Modal ----------
+      const projectsGrid = document.getElementById("projects-grid");
+      const filterPills = document.querySelectorAll(".filter-pill");
+      const modal = document.getElementById("project-modal");
+      const modalCloseBtn = document.getElementById("modal-close-btn");
+      const modalDoneBtn = document.getElementById("modal-done-btn");
+
+      function renderProjects(filterKey) {
+        if (!projectsGrid) return;
+        const list = PROJECTS.filter((p) => p.filters.includes(filterKey));
+
+        projectsGrid.innerHTML = list
+          .map((proj) => {
+            const techPills = proj.technologies
+              .map((t) => `<li class="pill">${escapeHtml(t)}</li>`)
+              .join("");
+            const learnedItems = proj.learned
+              .map((item) => `<li>${escapeHtml(item)}</li>`)
+              .join("");
+
+            return `
+              <article class="card project-card">
+                <div>
+                  <div class="project-meta">
+                    <span>${escapeHtml(proj.categoryLabel)}</span>
+                  </div>
+                  <h3 class="card-title">${escapeHtml(proj.title)}</h3>
+                  <p class="card-text">${escapeHtml(proj.description)}</p>
+
+                  <p class="project-subhead">Technologies Used</p>
+                  <ul class="pill-list" style="margin-top: 0.35rem;">${techPills}</ul>
+
+                  <p class="project-subhead">What I Learned</p>
+                  <ul class="clean-list">${learnedItems}</ul>
+
+                  <div class="repo-note">${escapeHtml(proj.repoText)}</div>
+                </div>
+
+                <div class="project-footer">
+                  <span style="font-size: 0.82rem; color: var(--text-muted);">GitHub Repository: [Add Link]</span>
+                  <button type="button" class="btn-secondary btn-sm open-modal-btn" data-id="${escapeAttr(proj.id)}">
+                    Details View ↗
+                  </button>
+                </div>
+              </article>
+            `;
+          })
+          .join("");
+
+        projectsGrid.querySelectorAll(".open-modal-btn").forEach((btn) => {
+          btn.addEventListener("click", () => openProjectModal(btn.getAttribute("data-id")));
+        });
+      }
+
+      function openProjectModal(projectId) {
+        const proj = PROJECTS.find((p) => p.id === projectId);
+        if (!proj || !modal) return;
+
+        document.getElementById("modal-category").textContent = proj.categoryLabel;
+        document.getElementById("modal-title").textContent = proj.title;
+        document.getElementById("modal-desc").textContent = proj.description;
+        document.getElementById("modal-repo").textContent = proj.repoText;
+
+        document.getElementById("modal-tech").innerHTML = proj.technologies
+          .map((t) => `<li class="pill">${escapeHtml(t)}</li>`)
+          .join("");
+
+        document.getElementById("modal-learned").innerHTML = proj.learned
+          .map((item) => `<li>${escapeHtml(item)}</li>`)
+          .join("");
+
+        modal.classList.add("open");
+      }
+
+      function closeProjectModal() {
+        if (!modal) return;
+        modal.classList.remove("open");
+      }
+
+      filterPills.forEach((pill) => {
+        pill.addEventListener("click", function () {
+          filterPills.forEach((p) => p.classList.remove("active"));
+          pill.classList.add("active");
+          renderProjects(pill.getAttribute("data-filter") || "all");
+        });
+      });
+
+      if (modalCloseBtn) modalCloseBtn.addEventListener("click", closeProjectModal);
+      if (modalDoneBtn) modalDoneBtn.addEventListener("click", closeProjectModal);
+      if (modal) {
+        modal.addEventListener("click", (e) => {
+          if (e.target === modal) closeProjectModal();
+        });
+      }
+
+      document.addEventListener("keydown", function (e) {
+        if (e.key === "Escape") {
+          closeProjectModal();
+          setDrawer(false);
+        }
+      });
+
+      // ---------- Copy Email Button ----------
+      const copyEmailBtn = document.getElementById("copy-email-btn");
+      const emailTextEl = document.getElementById("email-text");
+      const copyStatusEl = document.getElementById("copy-status");
+
+      if (copyEmailBtn && emailTextEl && copyStatusEl) {
+        copyEmailBtn.addEventListener("click", function () {
+          const email = emailTextEl.textContent.trim();
+          let copied = false;
+
+          try {
+            const helper = document.createElement("textarea");
+            helper.value = email;
+            helper.setAttribute("readonly", "");
+            helper.style.position = "fixed";
+            helper.style.left = "-9999px";
+            document.body.appendChild(helper);
+            helper.select();
+            copied = document.execCommand("copy");
+            document.body.removeChild(helper);
+          } catch (err) {
+            copied = false;
+          }
+
+          copyStatusEl.classList.add("show", "feedback-success");
+          copyStatusEl.textContent = copied
+            ? `Copied to clipboard: ${email}`
+            : `Email address: ${email} (copy manually if needed)`;
+        });
+      }
+
+      // ---------- Contact Form Validation & Feedback ----------
+      const contactForm = document.getElementById("contact-form");
+      const formFeedback = document.getElementById("form-feedback");
+
+      function setFormMessage(type, text) {
+        if (!formFeedback) return;
+        formFeedback.className = "feedback-msg show " + (type === "success" ? "feedback-success" : "feedback-error");
+        formFeedback.textContent = text;
+      }
+
+      if (contactForm) {
+        contactForm.addEventListener("submit", function (e) {
+          e.preventDefault();
+          const nameInput = document.getElementById("msg-name");
+          const emailInput = document.getElementById("msg-email");
+          const bodyInput = document.getElementById("msg-body");
+
+          const name = nameInput ? nameInput.value.trim() : "";
+          const email = emailInput ? emailInput.value.trim() : "";
+          const message = bodyInput ? bodyInput.value.trim() : "";
+          const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+          if (!name) {
+            setFormMessage("error", "Please enter your name.");
+            if (nameInput) nameInput.focus();
+            return;
+          }
+          if (!email || !emailRegex.test(email)) {
+            setFormMessage("error", "Please enter a valid email address.");
+            if (emailInput) emailInput.focus();
+            return;
+          }
+          if (!message) {
+            setFormMessage("error", "Please write a message before submitting.");
+            if (bodyInput) bodyInput.focus();
+            return;
+          }
+
+          setFormMessage(
+            "success",
+            `Thanks, ${name}! Your message has been prepared for ${emailTextEl ? emailTextEl.textContent.trim() : "reenagopal25@navgurukul.org"}.`
+          );
+          contactForm.reset();
+        });
+      }
+
+      // ---------- Helpers & Initial Setup ----------
+      function escapeHtml(str) {
+        return String(str)
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;");
+      }
+
+      function escapeAttr(str) {
+        return String(str).replace(/"/g, "&quot;");
+      }
+
+      const yearEl = document.getElementById("year");
+      if (yearEl) {
+        yearEl.textContent = String(new Date().getFullYear());
+      }
+
+      renderProjects("all");
+    })();
+  </script>
+</body>
+</html>
